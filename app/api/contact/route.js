@@ -34,16 +34,6 @@ export async function POST(request) {
     const publicKey = process.env.EMAILJS_PUBLIC_KEY;
     const privateKey = process.env.EMAILJS_PRIVATE_KEY;
 
-    // Debug log (only in development)
-    if (process.env.NODE_ENV === 'development') {
-      console.log('EmailJS Config Check:', {
-        serviceId: serviceId ? '✓ present' : '✗ missing',
-        templateId: templateId ? '✓ present' : '✗ missing',
-        publicKey: publicKey ? '✓ present' : '✗ missing',
-        privateKey: privateKey ? '✓ present' : '✗ missing',
-      });
-    }
-
     if (!serviceId || !templateId || !publicKey) {
       console.error('EmailJS configuration missing');
       return NextResponse.json(
@@ -64,9 +54,9 @@ export async function POST(request) {
       message: body.message,
       ip_address: ip,
     };
-    
+
     // Send email via EmailJS
-    const response = await emailjs.send(
+    await emailjs.send(
       serviceId,
       templateId,
       templateParams,
@@ -102,17 +92,12 @@ export async function POST(request) {
     });
     
   } catch (error) {
-    // Detailed error logging for debugging
-    console.error('Contact form error:', {
-      message: error.message,
-      stack: error.stack,
-      response: error.response?.data || error.response || 'No response data',
-    });
+    console.error('Contact form error:', error.message || error.text || error);
 
     return NextResponse.json(
       {
         error: 'Failed to send email',
-        message: error.message
+        message: error.message || error.text || 'An error occurred'
       },
       { status: 500 }
     );
