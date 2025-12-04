@@ -161,8 +161,8 @@ export default function Hero() {
                 }}
               >
                 <Image
-                  src="/images/accueil2.jpg"
-                  alt="Chef cuisinier"
+                  src="/images/accueil2.webp"
+                  alt="Chef cuisinier professionnel"
                   fill
                   style={{ objectFit: 'cover' }}
                   priority
@@ -186,8 +186,8 @@ export default function Hero() {
                 }}
               >
                 <Image
-                  src="/images/accueil1.jpg"
-                  alt="Artisan BTP"
+                  src="/images/accueil1.webp"
+                  alt="Artisan du BTP sur chantier"
                   fill
                   style={{ objectFit: 'cover' }}
                   priority
@@ -211,8 +211,8 @@ export default function Hero() {
                 }}
               >
                 <Image
-                  src="/images/accueil3.jpg"
-                  alt="Entrepreneur"
+                  src="/images/accueil3.webp"
+                  alt="Entrepreneur et chef d'entreprise"
                   fill
                   style={{ objectFit: 'cover' }}
                   priority
@@ -289,7 +289,7 @@ export default function Hero() {
                   }}
                 >
                   <Image
-                    src="/images/accueil1.jpg"
+                    src="/images/accueil1.webp"
                     alt="Artisan BTP"
                     fill
                     style={{ objectFit: 'cover' }}
@@ -322,7 +322,7 @@ export default function Hero() {
                   }}
                 >
                   <Image
-                    src="/images/accueil2.jpg"
+                    src="/images/accueil2.webp"
                     alt="Chef cuisinier"
                     fill
                     style={{ objectFit: 'cover' }}
@@ -355,7 +355,7 @@ export default function Hero() {
                   }}
                 >
                   <Image
-                    src="/images/accueil3.jpg"
+                    src="/images/accueil3.webp"
                     alt="Entrepreneur"
                     fill
                     style={{ objectFit: 'cover' }}

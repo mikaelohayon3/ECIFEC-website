@@ -23,8 +23,8 @@ export default function StructuredData() {
     name: 'Cabinet ECIFEC',
     alternateName: 'ECIFEC Expert-Comptable',
     url: 'https://ecifec.com',
-    logo: 'https://ecifec.com/images/logo.png',
-    image: 'https://ecifec.com/images/logo.png',
+    logo: 'https://ecifec.com/images/logo.webp',
+    image: 'https://ecifec.com/images/logo.webp',
     description:
       "Cabinet d'expertise comptable ECIFEC à Sarcelles. Accompagnement personnalisé pour les entreprises : comptabilité, fiscalité, social, juridique. Spécialisé BTP, professions libérales, commerce, transport.",
     foundingDate: '2007',

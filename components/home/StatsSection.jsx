@@ -42,11 +42,12 @@ export default function StatsSection() {
                       }}
                     >
                       <Image
-                        src="/images/oec.png"
+                        src="/images/oec.webp"
                         alt="Ordre des Experts-Comptables"
                         width={140}
                         height={140}
                         style={{ objectFit: 'contain' }}
+                        loading="lazy"
                       />
                     </Box>
                   ) : (

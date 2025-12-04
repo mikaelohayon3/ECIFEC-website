@@ -26,12 +26,12 @@ import SectorIcon from '@/components/sectors/SectorIcon';
 export default function SecteursPage() {
   // Mapping des images des secteurs
   const sectorImages = {
-    btp: '/images/secteur-artisanat_btp.jpg',
-    commerciaux: '/images/secteur-commerce_distribution.jpg',
-    transport: '/images/secteur-transport_logistique.jpg',
-    liberales: '/images/secteur-professions_liberales.jpg',
-    'services-entreprises': '/images/secteur-service_entreprise.jpg',
-    'services-particuliers': '/images/secteur-service_particulier.jpg',
+    btp: '/images/secteur-artisanat_btp.webp',
+    commerciaux: '/images/secteur-commerce_distribution.webp',
+    transport: '/images/secteur-transport_logistique.webp',
+    liberales: '/images/secteur-professions_liberales.webp',
+    'services-entreprises': '/images/secteur-service_entreprise.webp',
+    'services-particuliers': '/images/secteur-service_particulier.webp',
   };
 
   return (
@@ -145,9 +145,10 @@ export default function SecteursPage() {
                         {sectorImages[sector.slug] ? (
                           <Image
                             src={sectorImages[sector.slug]}
-                            alt={sector.title}
+                            alt={`Secteur ${sector.title}`}
                             fill
                             style={{ objectFit: 'cover' }}
+                            loading="lazy"
                           />
                         ) : (
                           <Box

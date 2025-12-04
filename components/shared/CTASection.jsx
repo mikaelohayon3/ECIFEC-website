@@ -1,6 +1,7 @@
 'use client';
 import { Box, Container, Typography, Button } from '@mui/material';
 import Link from 'next/link';
+import Image from 'next/image';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { CABINET_INFO } from '@/lib/data/navigation';
@@ -14,25 +15,31 @@ export default function CTASection({
   return (
     <Box
       sx={{
-        backgroundImage: 'url(/images/CTA-banner.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
         py: { xs: 8, md: 12 },
         position: 'relative',
         overflow: 'hidden',
-        '&::before': {
-          content: '""',
+      }}
+    >
+      {/* Background image with lazy loading */}
+      <Image
+        src="/images/CTA-banner.webp"
+        alt="Contact et accompagnement comptable"
+        fill
+        style={{ objectFit: 'cover', objectPosition: 'center' }}
+        quality={85}
+      />
+      {/* Dark overlay */}
+      <Box
+        sx={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
           backgroundColor: 'rgba(0, 0, 0, 0.4)',
-          zIndex: 0,
-        },
-      }}
-    >
+          zIndex: 1,
+        }}
+      />
       {/* Decorative elements */}
       <Box
         sx={{
@@ -43,6 +50,7 @@ export default function CTASection({
           height: 300,
           borderRadius: '50%',
           backgroundColor: 'rgba(255,255,255,0.05)',
+          zIndex: 1,
         }}
       />
       <Box
@@ -54,10 +62,11 @@ export default function CTASection({
           height: 400,
           borderRadius: '50%',
           backgroundColor: 'rgba(255,255,255,0.03)',
+          zIndex: 1,
         }}
       />
 
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
         <FadeInSection delay={0} direction="up">
           <Box sx={{ textAlign: 'center', color: 'white' }}>
             <Typography

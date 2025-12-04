@@ -264,7 +264,7 @@ export default function Header() {
                 }}
               >
                 <Image
-                  src="/images/logo.png"
+                  src="/images/logo.webp"
                   alt="Cabinet ECIFEC Logo"
                   width={isMobile ? 120 : 160}
                   height={isMobile ? 50 : 130}

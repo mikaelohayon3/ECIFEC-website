@@ -21,7 +21,6 @@ import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import emailjs from '@emailjs/browser';
 import DOMPurify from 'isomorphic-dompurify';
 
 const contactSchema = z.object({
@@ -62,7 +61,7 @@ export default function ContactForm() {
   });
 
   const onSubmit = async (data) => {
-    // Rate limiting avec localStorage (protection anti-spam)
+    // Rate limiting avec localStorage (protection anti-spam côté client)
     const lastSubmitTime = localStorage.getItem('lastContactSubmit');
     const now = Date.now();
     const COOLDOWN = 60000; // 1 minute entre chaque soumission
@@ -80,83 +79,37 @@ export default function ContactForm() {
     setIsSubmitting(true);
 
     try {
-      // Vérifier que les variables d'environnement sont présentes
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-
-      if (process.env.NODE_ENV === 'development') {
-        console.log('EmailJS Configuration:', {
-          serviceId: serviceId ? 'Défini' : 'MANQUANT',
-          templateId: templateId ? 'Défini' : 'MANQUANT',
-          publicKey: publicKey ? 'Défini' : 'MANQUANT',
-        });
-      }
-
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error('Configuration EmailJS incomplète. Vérifiez votre fichier .env.local');
-      }
-
       // Sanitizer les données pour éviter les injections HTML/XSS
       const sanitizedData = {
         name: DOMPurify.sanitize(data.name, { ALLOWED_TAGS: [] }),
         email: DOMPurify.sanitize(data.email, { ALLOWED_TAGS: [] }),
         phone: DOMPurify.sanitize(data.phone, { ALLOWED_TAGS: [] }),
+        requestType: data.requestType,
         sector: DOMPurify.sanitize(data.sector || '', { ALLOWED_TAGS: [] }),
         message: DOMPurify.sanitize(data.message, { ALLOWED_TAGS: [] }),
+        rgpd: data.rgpd,
       };
 
-      // Préparer les paramètres du template
-      const templateParams = {
-        from_name: sanitizedData.name,
-        from_email: sanitizedData.email,
-        phone: sanitizedData.phone,
-        request_type: data.requestType === 'devis' ? 'Demande de devis' :
-                     data.requestType === 'rendez-vous' ? 'Prise de rendez-vous' :
-                     'Question générale',
-        sector: sanitizedData.sector || 'Non spécifié',
-        message: sanitizedData.message,
-      };
+      // Get CSRF token from cookie
+      const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrf-token='))
+        ?.split('=')[1];
 
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Envoi du formulaire avec les paramètres:', templateParams);
-      }
+      // Envoyer la requête à l'API sécurisée
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken || '',
+        },
+        body: JSON.stringify(sanitizedData),
+      });
 
-      // Initialiser EmailJS avec votre Public Key
-      emailjs.init(publicKey);
+      const result = await response.json();
 
-      // Envoyer l'email principal au cabinet
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Envoi de l\'email principal...');
-      }
-      const response = await emailjs.send(
-        serviceId,
-        templateId,
-        templateParams
-      );
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Email principal envoyé avec succès:', response);
-      }
-
-      // Envoyer l'email de confirmation au client (si template configuré)
-      const autoresponseTemplateId = process.env.NEXT_PUBLIC_EMAILJS_AUTORESPONSE_TEMPLATE_ID;
-      if (autoresponseTemplateId && autoresponseTemplateId !== 'your_autoresponse_template_id_here') {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Envoi de l\'auto-réponse...');
-        }
-        const autoresponseParams = {
-          to_name: sanitizedData.name,
-          to_email: sanitizedData.email,
-          request_type: templateParams.request_type,
-        };
-        const autoresponseResponse = await emailjs.send(
-          serviceId,
-          autoresponseTemplateId,
-          autoresponseParams
-        );
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Auto-réponse envoyée avec succès:', autoresponseResponse);
-        }
+      if (!response.ok) {
+        throw new Error(result.error || result.message || 'Erreur lors de l\'envoi');
       }
 
       // Enregistrer le timestamp de soumission (rate limiting)
@@ -166,20 +119,17 @@ export default function ContactForm() {
       router.push('/contact/confirmation');
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('EmailJS Error détaillée:', {
-          message: error.message || 'Pas de message',
-          text: error.text || 'Pas de texte',
-          status: error.status || 'Pas de status',
-          error: error,
-        });
+        console.error('Contact form error:', error);
       }
 
       let errorMessage = 'Une erreur est survenue. Veuillez réessayer ou nous contacter par téléphone.';
 
-      if (error.message) {
+      if (error.message.includes('CSRF')) {
+        errorMessage = 'Erreur de sécurité. Veuillez rafraîchir la page et réessayer.';
+      } else if (error.message.includes('429')) {
+        errorMessage = 'Trop de tentatives. Veuillez patienter quelques minutes.';
+      } else if (error.message) {
         errorMessage = error.message;
-      } else if (error.text) {
-        errorMessage = error.text;
       }
 
       setSnackbar({

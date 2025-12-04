@@ -43,11 +43,12 @@ export default function Footer() {
                 }}
               >
                 <Image
-                  src="/images/second-logo.png"
+                  src="/images/second-logo.webp"
                   alt="Cabinet ECIFEC"
                   width={160}
                   height={160}
                   style={{ objectFit: 'contain' }}
+                  loading="lazy"
                 />
               </Box>
               <Typography
@@ -78,36 +79,47 @@ export default function Footer() {
               </Typography>
             </Box>
 
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <IconButton
-                component="a"
-                href={CABINET_INFO.social.linkedin}
-                target="_blank"
-                sx={{
-                  color: 'white',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  '&:hover': {
-                    backgroundColor: 'secondary.main',
-                  },
-                }}
-              >
-                <LinkedInIcon />
-              </IconButton>
-              <IconButton
-                component="a"
-                href={CABINET_INFO.social.facebook}
-                target="_blank"
-                sx={{
-                  color: 'white',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  '&:hover': {
-                    backgroundColor: 'secondary.main',
-                  },
-                }}
-              >
-                <FacebookIcon />
-              </IconButton>
-            </Box>
+            {(CABINET_INFO.social.linkedin && CABINET_INFO.social.linkedin !== '#') ||
+             (CABINET_INFO.social.facebook && CABINET_INFO.social.facebook !== '#') ? (
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                {CABINET_INFO.social.linkedin && CABINET_INFO.social.linkedin !== '#' && (
+                  <IconButton
+                    component="a"
+                    href={CABINET_INFO.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visitez notre page LinkedIn"
+                    sx={{
+                      color: 'white',
+                      backgroundColor: 'rgba(255,255,255,0.1)',
+                      '&:hover': {
+                        backgroundColor: 'secondary.main',
+                      },
+                    }}
+                  >
+                    <LinkedInIcon />
+                  </IconButton>
+                )}
+                {CABINET_INFO.social.facebook && CABINET_INFO.social.facebook !== '#' && (
+                  <IconButton
+                    component="a"
+                    href={CABINET_INFO.social.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visitez notre page Facebook"
+                    sx={{
+                      color: 'white',
+                      backgroundColor: 'rgba(255,255,255,0.1)',
+                      '&:hover': {
+                        backgroundColor: 'secondary.main',
+                      },
+                    }}
+                  >
+                    <FacebookIcon />
+                  </IconButton>
+                )}
+              </Box>
+            ) : null}
           </Grid>
 
           {/* Navigation Links */}
