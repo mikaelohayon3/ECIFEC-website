@@ -19,6 +19,7 @@ export default function sitemap() {
   // Secteurs slugs
   const secteurs = [
     'btp',
+    'associations',
     'commerciaux',
     'transport',
     'liberales',
@@ -93,6 +94,12 @@ export default function sitemap() {
       lastModified,
       changeFrequency: 'monthly',
       priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/ressources/facture-electronique`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/mentions-legales`,

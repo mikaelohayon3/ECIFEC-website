@@ -27,6 +27,7 @@ export default function SecteursPage() {
   // Mapping des images des secteurs
   const sectorImages = {
     btp: '/images/secteur-artisanat_btp.webp',
+    associations: '/images/secteur-association.webp',
     commerciaux: '/images/secteur-commerce_distribution.webp',
     transport: '/images/secteur-transport_logistique.webp',
     liberales: '/images/secteur-professions_liberales.webp',

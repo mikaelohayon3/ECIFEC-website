@@ -4,6 +4,7 @@ import Link from 'next/link';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SectionTitle from '@/components/shared/SectionTitle';
 import CTASection from '@/components/shared/CTASection';
@@ -34,6 +35,14 @@ const RESOURCES = [
     icon: AccountTreeIcon,
     href: '/ressources/structure-service',
     color: 'primary.main',
+  },
+  {
+    id: 'facture-electronique',
+    title: 'Facture Électronique 2026',
+    description: 'Tout comprendre sur la réforme obligatoire de facturation électronique B2B et préparer votre mise en conformité.',
+    icon: ReceiptIcon,
+    href: '/ressources/facture-electronique',
+    color: 'secondary.main',
   },
 ];
 
@@ -81,7 +90,7 @@ export default function RessourcesPage() {
             {RESOURCES.map((resource, index) => {
               const IconComponent = resource.icon;
               return (
-                <Grid item xs={12} md={4} key={resource.id}>
+                <Grid item xs={12} sm={6} md={3} key={resource.id}>
                   <FadeInSection delay={index * 100} direction="up">
                     <Card
                       sx={{
@@ -119,6 +128,7 @@ export default function RessourcesPage() {
                             fontWeight: 700,
                             mb: 2,
                             color: 'primary.main',
+                            minHeight: { xs: 'auto', md: '64px' },
                           }}
                         >
                           {resource.title}
@@ -130,6 +140,7 @@ export default function RessourcesPage() {
                             color: 'text.secondary',
                             lineHeight: 1.7,
                             mb: 3,
+                            minHeight: { xs: 'auto', md: '150px' },
                           }}
                         >
                           {resource.description}
@@ -139,7 +150,7 @@ export default function RessourcesPage() {
                           component={Link}
                           href={resource.href}
                           variant="contained"
-                          color={resource.id === 'simulateurs' ? 'secondary' : 'primary'}
+                          color={resource.color === 'secondary.main' ? 'secondary' : 'primary'}
                           size="large"
                           endIcon={<ArrowForwardIcon />}
                           sx={{
